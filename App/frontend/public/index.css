@@ -1,0 +1,12 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(160deg, #FF206E, #FFFB12);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height:100%;
+}
