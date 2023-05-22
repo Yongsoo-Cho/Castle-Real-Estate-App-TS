@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listListing = exports.editListing = exports.describeListing = exports.deleteListing = exports.createListing = void 0;
+exports.updateListingStatus = exports.listListingByUser = exports.listListing = exports.editListing = exports.describeListing = exports.deleteListing = exports.createListing = void 0;
 const listing_1 = require("../models/listing");
 const user_1 = require("../models/user");
 const createListing = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,3 +55,17 @@ const listListing = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     res.json(listings);
 });
 exports.listListing = listListing;
+const listListingByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const userId = ((_b = req.body) === null || _b === void 0 ? void 0 : _b.userId) || '';
+    const listings = yield listing_1.Listing.find({ userId: userId });
+    res.json(listings);
+});
+exports.listListingByUser = listListingByUser;
+const updateListingStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idQuery = { _id: req.body.id };
+    const updateQuery = { $set: { status: req.body.status } };
+    const listing = yield listing_1.Listing.updateOne(idQuery, updateQuery);
+    res.json(listing);
+});
+exports.updateListingStatus = updateListingStatus;

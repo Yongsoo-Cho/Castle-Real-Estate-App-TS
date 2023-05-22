@@ -3,8 +3,21 @@ import decode from 'jwt-decode';
 import {describeUser} from '../../profile/profile-operations';
 import { InputContainer, Form, Header, PriceWrapper, Price, Dollar, Textarea, Submit, CharacterCounter } from './create-listing-components';
 import { createListing } from "../list-listing/listing-operations";
+import { profile } from "console";
  
-const CreateListing = () => {
+interface ListingProps {
+    location: string;
+    price: number;
+    status: string;
+    description: string;
+};
+
+interface CreateListingProps {
+    offlineListings: ListingProps[];
+    formOfflineListings: (listing: ListingProps) => void;
+};
+
+const CreateListing: React.FC<CreateListingProps> = ({offlineListings, formOfflineListings}) => {
     const [content, setContent] = useState("");
     const [header, setHeader] = useState("");
     const [price, setPrice] = useState("");
@@ -23,17 +36,15 @@ const CreateListing = () => {
         }
 
         const profileResponse = await describeUser(userId);
-
         const listing = {
             userId: profileResponse._id,
             location: header,
             description: content,
             price: priceNum,
             status: "For Sale"
-        }
-
+        };
+        formOfflineListings(listing);
         await createListing(listing);
-
 
         setContent("");
         setHeader("");

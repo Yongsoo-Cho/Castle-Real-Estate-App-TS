@@ -50,3 +50,19 @@ export const listListing = async (req: Request, res: Response) => {
 
     res.json(listings);
 };
+
+export const listListingByUser = async (req: Request, res: Response) => {
+    const userId = req.body?.userId || '';
+
+    const listings = await Listing.find({ userId: userId });
+
+    res.json(listings);
+};
+
+export const updateListingStatus = async (req: Request, res: Response) => {
+    const idQuery = { _id: req.body.id };
+    const updateQuery = { $set: { status: req.body.status } };
+
+    const listing = await Listing.updateOne(idQuery, updateQuery);
+    res.json(listing);
+};

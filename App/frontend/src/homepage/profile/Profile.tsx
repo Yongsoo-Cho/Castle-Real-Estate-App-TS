@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { describeUser } from './profile-operations';
 import decode from 'jwt-decode';
-import { ProfileContainer, FullName, Email } from './profile-components';
+import { ProfileContainer, FullName, Email, MyListings } from './profile-components';
+import ProfileModal from './ProfileModal';
 
 interface ProfileProps {
     firstName: string;
@@ -10,7 +11,15 @@ interface ProfileProps {
 }
 
 const Profile: React.FC = () => {
-    const [profile, setProfile] = useState( {} );
+    const [profile, setProfile] = useState<ProfileProps>( {firstName:'', lastName:'', email:''} );
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+    function openModal() {
+        setIsOpen(true);
+    }
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     let userId: string | undefined;
     if (window.localStorage.getItem('token')) {
@@ -34,6 +43,13 @@ const Profile: React.FC = () => {
             Signed in as:
             <FullName>{(profile as ProfileProps).firstName} {(profile as ProfileProps).lastName}</FullName> 
             <Email>{(profile as ProfileProps).email}</Email>
+
+            <ProfileModal
+                modalIsOpen={modalIsOpen}
+                closeModal={closeModal}
+                info={profile}
+            />
+            <MyListings onClick={openModal}>My Listings</MyListings>
         </ProfileContainer>
     );
 };

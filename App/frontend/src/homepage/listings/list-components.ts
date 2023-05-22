@@ -67,9 +67,26 @@ export const StatusContainer = styled.div`
     font-family: 'Jost', sans-serif;
     border-radius: 1rem;
     padding: 0.5rem;
-    justify-self: right;
-    align-self: end;
 
     text-align: center;
     min-width: 120px;
+`;
+
+export const Button = styled.button`
+    font-family: 'Jost', sans-serif;
+    color: #fdfdfd;
+    font-size: 0.9rem;
+    
+    border-radius: 1rem;
+    
+    text-align: center;
+    padding: 0.5rem;
+    background: #FF206E;
+    border: none;
+    cursor: pointer;
+
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+        background: #FF206E95;
 `;

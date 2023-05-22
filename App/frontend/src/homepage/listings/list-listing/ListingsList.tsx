@@ -5,6 +5,7 @@ import {listListings} from './listing-operations';
 
 interface ListingListProps {
     prefix: string;
+    offlineListings: ListingProps[];
 };
 interface ListingProps {
     location: string;
@@ -13,29 +14,22 @@ interface ListingProps {
     description: string;
 }
 
-const ListingsList: React.FC<ListingListProps> = ({prefix}) => {
+const ListingsList: React.FC<ListingListProps> = ({prefix, offlineListings}) => {
     const [listingList, setListingList] = useState<ListingProps[]>([]);
-    const [listingMap, setListingMap] = useState<{[key: string]: ListingProps}>({});
 
     useEffect(() => {
         const fetchListings = async () => {
+            console.log('fetched listings')
             const listingsResponse = await listListings({prefix: prefix});
-
-            console.log(listingsResponse)
-
             setListingList(listingsResponse.reverse());
-            const map: { [key: string]: ListingProps } = {};
-            for (let i = 0; i < listingsResponse.length; i++) {
-                const listing = listingsResponse[i];
-                map[listing.id] = listing;
-            };
-            setListingMap(map);
-            console.log(listingMap);
         };
 
         fetchListings();
-        console.log(listingMap);
-    }, [prefix, listingMap]);
+    }, [prefix]);
+
+    useEffect(() => {
+        setListingList(offlineListings);
+    }, [offlineListings]);
 
     const listingComponenets = listingList.map(t => {
         return (

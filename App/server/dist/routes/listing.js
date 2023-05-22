@@ -11,4 +11,6 @@ router.delete('/:id', listing_1.deleteListing);
 router.get('/describe', listing_1.describeListing);
 router.post('/edit', listing_1.editListing);
 router.post('/list', listing_1.listListing);
+router.post('/listByUser', listing_1.listListingByUser);
+router.post('/updateListingStatus', listing_1.updateListingStatus);
 module.exports = router;

@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from './components/navbar/Navbar';
 import ListingsList from './listings/list-listing/ListingsList';
 import styled from 'styled-components';
 import Profile from './profile/Profile';
 import CreateListing from './listings/create-listing/CreateListing';
+import Listing from './listings/Listing';
+
+import {listListings} from './listings/list-listing/listing-operations';
 
 const InputContainer = styled.input`{
 
@@ -38,9 +41,30 @@ const InputContainer = styled.input`{
 interface HomepageProps {
     authentication: boolean;
 }
+interface ListingProps {
+    location: string;
+    price: number;
+    status: string;
+    description: string;
+}
 
 const Homepage: React.FC<HomepageProps> = ({authentication}) => {
     const [prefix, setPrefix] = useState('');
+    const [offlineListings, setOfflineListings] = useState<ListingProps[]>([]);
+
+    const fetchListings = async () => {
+        const listingsResponse = await listListings({prefix: prefix});
+        setOfflineListings(listingsResponse.reverse());
+    };
+
+    useEffect(() => {
+        fetchListings();
+    }, [prefix]);
+
+    useEffect(() => {
+        fetchListings();
+    }, [offlineListings]);
+
 
     return(
 
@@ -55,10 +79,16 @@ const Homepage: React.FC<HomepageProps> = ({authentication}) => {
             </div>
 
             {authentication && <Profile/>}
-            {authentication && <CreateListing/>}
+            {authentication && <CreateListing 
+                offlineListings={offlineListings} 
+                formOfflineListings={(listing: ListingProps)=>{
+                    setPrefix('');
+                    setOfflineListings([...offlineListings, listing]);
+                }}
+            />}
             
-            <div style={{display: "flex", height:"100vh"}}>
-                <ListingsList prefix={prefix}/>
+            <div style={{display: "flex", height:"100svh"}}>
+                <ListingsList prefix={prefix} offlineListings={offlineListings}/>
                 <Navbar auth={authentication}/>
             </div>
         </div>
